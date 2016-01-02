@@ -99,6 +99,13 @@ namespace HubApp1.Data
         //    return null;
         //}
 
+        public static async Task<string> DeleteDriver(int id)
+        {
+            var driverService = new DriverService();
+            var response = await driverService.DeleteDriver(id);
+            return response.ToString();
+        }
+
         public static async Task<string> AddDriverItem(Driver driver)
         {
             var driverService = new DriverService();

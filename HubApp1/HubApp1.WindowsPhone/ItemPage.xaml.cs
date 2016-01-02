@@ -10,6 +10,7 @@ using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -88,6 +89,23 @@ namespace HubApp1
         }
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
+
+            if (!Frame.Navigate(typeof(HubPage)))
+            {
+                var resourceLoader = ResourceLoader.GetForCurrentView("Resources");
+                throw new Exception(resourceLoader.GetString("NavigationFailedExceptionMessage"));
+            }
+        }
+
+        private async void AppBarButton_Delete(object sender, RoutedEventArgs e)
+        {
+            int itemId = ((SampleDataItem)this.DefaultViewModel["Driver"]).Id;
+
+            string response = await SampleDataSource.DeleteDriver(itemId);
+
+            MessageDialog msgbox = new MessageDialog("Driver deleted! Byebye!");
+
+            await msgbox.ShowAsync();
 
             if (!Frame.Navigate(typeof(HubPage)))
             {

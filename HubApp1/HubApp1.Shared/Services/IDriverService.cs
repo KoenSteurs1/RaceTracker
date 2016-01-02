@@ -14,5 +14,7 @@ namespace HubApp1.Services
     {
         Task<IEnumerable<Driver>> GetAll();
         Task<string> AddDriver(Driver driver);
+        Task<string> DeleteDriver(int id);
+
     }
 }

@@ -24,7 +24,7 @@ namespace HubApp1.Services.Implementation
 
     public class DriverService : IDriverService
     {
-        private const string RestServiceUrl = "http://localhost/kartingapi/api/driver";
+        private const string RestServiceUrl = "http://race-tracker.azurewebsites.net/api/driver";
 
         //public async Task<Driver> AddDriver(Driver driver)
         //{
@@ -37,6 +37,32 @@ namespace HubApp1.Services.Implementation
         //    return driver;
         //}
 
+        public async Task<string> DeleteDriver(int id)
+        {
+            string data = id.ToString();
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(RestServiceUrl + "/" + id.ToString());
+            request.ContentType = "application/json";
+            request.Method = "DELETE";
+            var stream = await request.GetRequestStreamAsync();
+
+            using (var writer = new StreamWriter(stream))
+            {
+                writer.Write(data);
+                writer.Flush();
+                writer.Dispose();
+            }
+
+            var response = await request.GetResponseAsync();
+            var respStream = response.GetResponseStream();
+
+
+            using (StreamReader sr = new StreamReader(respStream))
+            {
+                //Need to return this response 
+                return sr.ReadToEnd();
+            }
+        }
+
         public async Task<string> AddDriver(Driver driver)
         {
             string data = JsonConvert.SerializeObject(driver);
@@ -44,18 +70,6 @@ namespace HubApp1.Services.Implementation
             request.ContentType = "application/json";
             request.Method = "POST";
             var stream = await request.GetRequestStreamAsync();
-
-            //const string dateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffffffZ";
-            //var jsonSerializerSettings = new DataContractJsonSerializerSettings
-            //{
-            //    DateTimeFormat = new DateTimeFormat(dateTimeFormat)
-            //};
-
-            //var jsonSerializer = new DataContractJsonSerializer(
-            //    typeof(Driver[]),
-            //    jsonSerializerSettings);
-
-            //jsonSerializer.WriteObject(stream, driver);
 
             using (var writer = new StreamWriter(stream))
             {
