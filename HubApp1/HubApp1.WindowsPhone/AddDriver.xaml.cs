@@ -28,10 +28,12 @@ namespace HubApp1
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class AddDriver : Page
+    public partial class AddDriver : Page
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        private HelperClass.PageMode pageMode;
+        private int driverId;
 
         public AddDriver()
         {
@@ -89,26 +91,55 @@ namespace HubApp1
 
         private async void SaveDriverButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                Driver driver = new Driver();
-                driver.Id = 0;
-                driver.FirstName = firstName.Text;
-                driver.LastName = lastName.Text;
-                driver.BirthDate = null;
-                driver.Picture = null;
+            if (this.pageMode == HelperClass.PageMode.Add)
+            // Adding driver
+            { 
+                try
+                {
+                    Driver driver = new Driver();
+                    driver.Id = 0;
+                    driver.FirstName = firstName.Text;
+                    driver.LastName = lastName.Text;
+                    driver.BirthDate = null;
+                    driver.Picture = null;
                
-                string response = await SampleDataSource.AddDriverItem(driver);
+                    string response = await SampleDataSource.AddDriverItem(driver);
 
-                MessageDialog msgbox = new MessageDialog("Driver added!");
+                    MessageDialog msgbox = new MessageDialog("Driver added!");
 
-                await msgbox.ShowAsync();
+                    await msgbox.ShowAsync();
 
-                Frame.Navigate(typeof(ItemPage), response);
+                    Frame.Navigate(typeof(ItemPage), response);
+                }
+                catch (Exception ex)
+                {
+
+                }
             }
-            catch (Exception ex)
+            else
+            // Editing driver
             {
+                try
+                {
+                    Driver driver = new Driver();
+                    driver.Id = this.driverId;
+                    driver.FirstName = firstName.Text;
+                    driver.LastName = lastName.Text;
+                    driver.BirthDate = null;
+                    driver.Picture = null;
 
+                    string response = await SampleDataSource.UpdateDriver(driver);
+
+                    MessageDialog msgbox = new MessageDialog("Driver updated! Pit stop completed!");
+
+                    await msgbox.ShowAsync();
+
+                    Frame.Navigate(typeof(ItemPage), this.driverId);
+                }
+                catch (Exception ex)
+                {
+
+                }
             }
         }
 
@@ -127,8 +158,23 @@ namespace HubApp1
         /// </summary>
         /// <param name="e">Provides data for navigation methods and event
         /// handlers that cannot cancel the navigation request.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            this.pageMode = ((EditDriverObject)(e.Parameter)).pageMode;
+            this.driverId = ((EditDriverObject)(e.Parameter)).Id;
+
+            if (pageMode == HelperClass.PageMode.Edit)
+                PageTitle.Text = "Edit Driver";
+
+            if (pageMode == HelperClass.PageMode.Edit)
+            {
+                SampleDataItem drv;
+                drv = await SampleDataSource.GetItemAsync(this.driverId.ToString());
+                // retrieve record which is being edited from database
+                firstName.Text = drv.FirstName;
+                lastName.Text = drv.LastName;
+            }
+
             this.navigationHelper.OnNavigatedTo(e);
         }
 

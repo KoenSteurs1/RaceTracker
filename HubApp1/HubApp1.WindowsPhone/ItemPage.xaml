@@ -61,7 +61,7 @@
         <CommandBar IsSticky="False" x:Name="appBar">
             <CommandBar.PrimaryCommands>
                 <AppBarButton Icon="Home" IsCompact="False" Label="Home" Click="AppBarButton_Click"/>
-                <AppBarButton Icon="Edit" IsCompact="False" Label="Edit" Click="AppBarButton_Click" />
+                <AppBarButton Icon="Edit" IsCompact="False" Label="Edit" Click="AppBarEditButton_Click" />
             </CommandBar.PrimaryCommands>
             <CommandBar.SecondaryCommands>
                 <AppBarButton Icon="Delete" IsCompact="False" Label="Delete" Click="AppBarButton_Delete"/>

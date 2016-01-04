@@ -26,23 +26,38 @@ namespace HubApp1.Services.Implementation
     {
         private const string RestServiceUrl = "http://race-tracker.azurewebsites.net/api/driver";
 
-        //public async Task<Driver> AddDriver(Driver driver)
-        //{
-        //    var client = new HttpClient
-        //    {
-        //        BaseAddress = new Uri(RestServiceUrl)
-        //    };
-
-
-        //    return driver;
-        //}
-
         public async Task<string> DeleteDriver(int id)
         {
             string data = id.ToString();
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(RestServiceUrl + "/" + id.ToString());
             request.ContentType = "application/json";
             request.Method = "DELETE";
+            var stream = await request.GetRequestStreamAsync();
+
+            using (var writer = new StreamWriter(stream))
+            {
+                writer.Write(data);
+                writer.Flush();
+                writer.Dispose();
+            }
+
+            var response = await request.GetResponseAsync();
+            var respStream = response.GetResponseStream();
+
+
+            using (StreamReader sr = new StreamReader(respStream))
+            {
+                //Need to return this response 
+                return sr.ReadToEnd();
+            }
+        }
+
+        public async Task<string> UpdateDriver(Driver driver)
+        {
+            string data = JsonConvert.SerializeObject(driver);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(RestServiceUrl + "/" + driver.Id.ToString());
+            request.ContentType = "application/json";
+            request.Method = "PUT";
             var stream = await request.GetRequestStreamAsync();
 
             using (var writer = new StreamWriter(stream))

@@ -152,8 +152,11 @@ namespace HubApp1
 
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
+            EditDriverObject edo = new EditDriverObject();
+            edo.Id = 0;
+            edo.pageMode = HelperClass.PageMode.Add;
 
-            if (!Frame.Navigate(typeof(AddDriver)))
+            if (!Frame.Navigate(typeof(AddDriver),edo))
             {
                 var resourceLoader = ResourceLoader.GetForCurrentView("Resources");
                 throw new Exception(resourceLoader.GetString("NavigationFailedExceptionMessage"));

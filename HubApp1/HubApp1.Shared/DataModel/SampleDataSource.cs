@@ -113,6 +113,14 @@ namespace HubApp1.Data
             return response.ToString();
         }
 
+        public static async Task<string> UpdateDriver(Driver driver)
+        {
+            var driverService = new DriverService();
+            var response = await driverService.UpdateDriver(driver);
+            return response.ToString();
+
+        }
+
         public static async Task<SampleDataItem> GetItemAsync(string id)
         {
             await _sampleDataSource.RefreshDataSource();

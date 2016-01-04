@@ -97,6 +97,19 @@ namespace HubApp1
             }
         }
 
+        private void AppBarEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            EditDriverObject edo = new EditDriverObject();
+            edo.Id = ((SampleDataItem)this.DefaultViewModel["Driver"]).Id;
+            edo.pageMode = HelperClass.PageMode.Edit;
+
+            if (!Frame.Navigate(typeof(AddDriver), edo))
+            {
+                var resourceLoader = ResourceLoader.GetForCurrentView("Resources");
+                throw new Exception(resourceLoader.GetString("NavigationFailedExceptionMessage"));
+            }
+        }
+
         private async void AppBarButton_Delete(object sender, RoutedEventArgs e)
         {
             int itemId = ((SampleDataItem)this.DefaultViewModel["Driver"]).Id;
