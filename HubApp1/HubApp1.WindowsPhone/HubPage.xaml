@@ -14,6 +14,7 @@
         <CommandBar IsSticky="False" x:Name="appBar">
             <CommandBar.PrimaryCommands>
                 <AppBarButton Icon="Add" IsCompact="False" Label="Add Driver" Click="AppBarButton_Click"/>
+                <AppBarButton Icon="Add" IsCompact="False" Label="Add Race" Click="AppBarButton_Click"/>
             </CommandBar.PrimaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
@@ -81,7 +82,7 @@
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot">
-        <Hub x:Name="Hub" x:Uid="Hub" Header="RaceTracker" Background="{ThemeResource HubBackgroundImageBrush}">
+        <Hub x:Name="Hub1" x:Uid="Hub" Header="RaceTracker" Background="{ThemeResource HubBackgroundImageBrush}">
             <HubSection x:Uid="HubSection1" Header="DRIVERS" DataContext="{Binding Drivers}" HeaderTemplate="{ThemeResource HubSectionHeaderTemplate}">
                 <DataTemplate>
                     <ListView
@@ -98,6 +99,26 @@
                         </ListView.ItemTemplate>
                     </ListView>
                 </DataTemplate>
+            </HubSection>
+            <HubSection x:Uid="HubSection2" Header="RACES" DataContext="{Binding Races}" HeaderTemplate="{ThemeResource HubSectionHeaderTemplate}">
+                <DataTemplate>
+                    <ListView
+                        ItemsSource="{Binding}"
+                        IsItemClickEnabled="True"
+                        ItemClick="GroupSection_RaceClick"
+                        ContinuumNavigationTransitionInfo.ExitElementContainer="True">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,0,0,27.5">
+                                    <TextBlock Text="{Binding FormattedDate}" Style="{ThemeResource ListViewItemTextBlockStyle}" />
+                                    <TextBlock Text="{Binding Location}" Style="{ThemeResource ListViewItemTextBlockStyle}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </DataTemplate>
+            </HubSection>
+            <HubSection x:Uid="HubSection3" Header="STANDINGS" DataContext="{Binding Races}" HeaderTemplate="{ThemeResource HubSectionHeaderTemplate}">
             </HubSection>
 
             <!--<HubSection x:Uid="HubSection2" Header="RACES" Width="Auto"

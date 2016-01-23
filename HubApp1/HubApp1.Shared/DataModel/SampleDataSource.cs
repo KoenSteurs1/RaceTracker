@@ -21,34 +21,6 @@ using Windows.UI.Xaml.Media.Imaging;
 namespace HubApp1.Data
 {
     /// <summary>
-    /// Generic item data model.
-    /// </summary>
-    public class SampleDataItem
-    {
-        public SampleDataItem(int id, String firstName, String lastName)
-        {
-            this.Id = id;
-            this.FirstName = firstName;
-            this.LastName = lastName;
-            this.Title = this.ToString();
-        }
-
-        public int Id { get; private set; }
-        public string FirstName { get; private set; }
-        public string LastName { get; private set; }
-        public string Title { get; private set; }
-
-        public override string ToString()
-        {
-            return this.FirstName + " " + this.LastName;
-        }
-    }
-
-     //<summary>
-     //Generic group data model.
-     //</summary>
-
-    /// <summary>
     /// Creates a collection of groups and items with content read from a static json file.
     /// 
     /// SampleDataSource initializes with data read from a static json file included in the 
@@ -58,13 +30,16 @@ namespace HubApp1.Data
     {
         private static SampleDataSource _sampleDataSource = new SampleDataSource();
 
-        private ObservableCollection<SampleDataItem> _items = new ObservableCollection<SampleDataItem>();
-        public ObservableCollection<SampleDataItem> Items
+        // DRIVERS
+
+        private ObservableCollection<Driver> _items = new ObservableCollection<Driver>();
+        
+        public ObservableCollection<Driver> Items
         {
             get { return this._items; }
         }
 
-        private async Task RefreshDataSource()
+        private async Task RefreshDrivers()
         {
             var driverService = new DriverService();
             var allDrivers = await driverService.GetAll();
@@ -74,30 +49,22 @@ namespace HubApp1.Data
 
             foreach (var driver in allDrivers)
             {
-                var sampleDataItem = new SampleDataItem(
+                var sampleDataItem = new Driver(
                     driver.Id,
                     driver.FirstName,
-                    driver.LastName);
+                    driver.LastName,
+                    driver.BirthDate);
 
                 _sampleDataSource.Items.Add(sampleDataItem);
             }
         }
 
-        public static async Task<IEnumerable<SampleDataItem>> GetItemsAsync()
+        public static async Task<IEnumerable<Driver>> GetItemsAsync()
         {
-            await _sampleDataSource.RefreshDataSource();
+            await _sampleDataSource.RefreshDrivers();
 
             return _sampleDataSource.Items;
         }
-
-        //public static async Task<SampleDataItem> GetItemAsync(string uniqueId)
-        //{
-        //    await _sampleDataSource.GetSampleDataAsync();
-        //    // Simple linear search is acceptable for small data sets
-        //    var matches = _sampleDataSource.Items.Where((group) => group.UniqueId.Equals(uniqueId));
-        //    if (matches.Count() == 1) return matches.First();
-        //    return null;
-        //}
 
         public static async Task<string> DeleteDriver(int id)
         {
@@ -118,48 +85,77 @@ namespace HubApp1.Data
             var driverService = new DriverService();
             var response = await driverService.UpdateDriver(driver);
             return response.ToString();
-
         }
 
-        public static async Task<SampleDataItem> GetItemAsync(string id)
+        public static async Task<Driver> GetItemAsync(string id)
         {
-            await _sampleDataSource.RefreshDataSource();
+            await _sampleDataSource.RefreshDrivers();
             int iid = Convert.ToInt16(id);
             var matches = _sampleDataSource.Items.Where(p => p.Id.Equals(iid)).FirstOrDefault();
             return matches;
         }
 
-        //private async Task GetSampleDataAsync()
-        //{
-        //    if (this._items.Count != 0)
-        //        return;
+        // RACES
 
-        //    Uri dataUri = new Uri("http://localhost/kartingapi/api/driver");
+        private ObservableCollection<Race> _races = new ObservableCollection<Race>();
 
-        //    StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(dataUri);
-        //    string jsonText = await FileIO.ReadTextAsync(file);
-        //    JsonObject jsonObject = JsonObject.Parse(jsonText);
-        //    JsonArray jsonArray = jsonObject["ArrayOfDriver"].GetArray();
+        public ObservableCollection<Race> Races
+        {
+            get { return this._races; }
+        }
 
-        //    foreach (JsonValue groupValue in jsonArray)
-        //    {
-        //        JsonObject itemObject = groupValue.GetObject();
-        //        SampleDataItem item = new SampleDataItem((int)itemObject["ID"].GetNumber(),
-        //                                                    itemObject["FirstName"].GetString(),
-        //                                                    itemObject["LastName"].GetString());
+        private async Task RefreshRaces()
+        {
+            var raceService = new RaceService();
+            var allRaces = await raceService.GetAll();
 
-        //        //foreach (JsonValue itemValue in groupObject["Items"].GetArray())
-        //        //{
-        //        //    JsonObject itemObject = itemValue.GetObject();
-        //        //    group.Items.Add(new SampleDataItem(itemObject["UniqueId"].GetString(),
-        //        //                                       itemObject["Title"].GetString(),
-        //        //                                       itemObject["Subtitle"].GetString(),
-        //        //                                       itemObject["ImagePath"].GetString(),
-        //        //                                       itemObject["Description"].GetString(),
-        //        //                                       itemObject["Content"].GetString()));
-        //        //}
-        //        this.Items.Add(item);
-        //    }
-        //}
+            while (_sampleDataSource.Races.Count() > 0)
+                _sampleDataSource.Races.RemoveAt(0);
+
+            foreach (var race in allRaces)
+            {
+                var sampleDataItem = new Race(
+                    race.ID,
+                    race.Date,
+                    race.Sequence,
+                    race.Type,
+                    race.Location,
+                    race.Comment);
+
+                _sampleDataSource.Races.Add(sampleDataItem);
+            }
+        }
+
+        public static async Task<IEnumerable<Race>> GetRacesAsync()
+        {
+            await _sampleDataSource.RefreshRaces();
+
+            return _sampleDataSource.Races;
+        }
+        public static async Task<string> DeleteRace(int id)
+        {
+            var raceService = new RaceService();
+            var response = await raceService.DeleteRace(id);
+            return response.ToString();
+        }
+        public static async Task<string> AddRace(Race race)
+        {
+            var raceService = new RaceService();
+            var response = await raceService.AddRace(race);
+            return response.ToString();
+        }
+        public static async Task<string> UpdateRace(Race race)
+        {
+            var raceService = new RaceService();
+            var response = await raceService.UpdateRace(race);
+            return response.ToString();
+        }
+        public static async Task<Race> GetRaceAsync(string id)
+        {
+            await _sampleDataSource.RefreshRaces();
+            int iid = Convert.ToInt16(id);
+            var matches = _sampleDataSource.Races.Where(p => p.ID.Equals(iid)).FirstOrDefault();
+            return matches;
+        }
     }
 }

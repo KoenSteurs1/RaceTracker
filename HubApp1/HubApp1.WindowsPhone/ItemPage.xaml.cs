@@ -1,5 +1,6 @@
 ﻿using HubApp1.Common;
 using HubApp1.Data;
+using HubApp1.Entities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -100,10 +101,10 @@ namespace HubApp1
         private void AppBarEditButton_Click(object sender, RoutedEventArgs e)
         {
             EditDriverObject edo = new EditDriverObject();
-            edo.Id = ((SampleDataItem)this.DefaultViewModel["Driver"]).Id;
+            edo.Id = ((Driver)this.DefaultViewModel["Driver"]).Id;
             edo.pageMode = HelperClass.PageMode.Edit;
 
-            if (!Frame.Navigate(typeof(AddDriver), edo))
+            if (!Frame.Navigate(typeof(DriverPage), edo))
             {
                 var resourceLoader = ResourceLoader.GetForCurrentView("Resources");
                 throw new Exception(resourceLoader.GetString("NavigationFailedExceptionMessage"));
@@ -112,7 +113,7 @@ namespace HubApp1
 
         private async void AppBarButton_Delete(object sender, RoutedEventArgs e)
         {
-            int itemId = ((SampleDataItem)this.DefaultViewModel["Driver"]).Id;
+            int itemId = ((Driver)this.DefaultViewModel["Driver"]).Id;
 
             string response = await SampleDataSource.DeleteDriver(itemId);
 

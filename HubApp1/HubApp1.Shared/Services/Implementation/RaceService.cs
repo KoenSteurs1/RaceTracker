@@ -22,11 +22,11 @@ namespace HubApp1.Services.Implementation
     using System.IO;
     using Newtonsoft.Json;
 
-    public class DriverService : IDriverService
+    public class RaceService : IRaceService
     {
-        private const string RestServiceUrl = "http://race-tracker.azurewebsites.net/api/driver";
+        private const string RestServiceUrl = "http://race-tracker.azurewebsites.net/api/races";
 
-        public async Task<string> DeleteDriver(int id)
+        public async Task<string> DeleteRace(int id)
         {
             string data = id.ToString();
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(RestServiceUrl + "/" + id.ToString());
@@ -51,10 +51,10 @@ namespace HubApp1.Services.Implementation
             }
         }
 
-        public async Task<string> UpdateDriver(Driver driver)
+        public async Task<string> UpdateRace(Race race)
         {
-            string data = JsonConvert.SerializeObject(driver);
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(RestServiceUrl + "/" + driver.Id.ToString());
+            string data = JsonConvert.SerializeObject(race);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(RestServiceUrl + "/" + race.ID.ToString());
             request.ContentType = "application/json";
             request.Method = "PUT";
             var stream = await request.GetRequestStreamAsync();
@@ -77,9 +77,9 @@ namespace HubApp1.Services.Implementation
             }
         }
 
-        public async Task<string> AddDriver(Driver driver)
+        public async Task<string> AddRace(Race race)
         {
-            string data = JsonConvert.SerializeObject(driver);
+            string data = JsonConvert.SerializeObject(race);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(RestServiceUrl);
             request.ContentType = "application/json";
             request.Method = "POST";
@@ -102,7 +102,7 @@ namespace HubApp1.Services.Implementation
             }
         }
 
-        public async Task<IEnumerable<Driver>> GetAll()
+        public async Task<IEnumerable<Race>> GetAll()
         {
             var client = new HttpClient
             {
@@ -113,7 +113,7 @@ namespace HubApp1.Services.Implementation
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             //// Retrieve all the groups with their items
-            var response = await client.GetAsync("driver");
+            var response = await client.GetAsync("races");
 
             //// Throw an exception if something went wrong
             response.EnsureSuccessStatusCode();
@@ -126,11 +126,11 @@ namespace HubApp1.Services.Implementation
             };
 
             var jsonSerializer = new DataContractJsonSerializer(
-                typeof(Driver[]),
+                typeof(Race[]),
                 jsonSerializerSettings);
 
             var stream = await response.Content.ReadAsStreamAsync();
-            return (Driver[])jsonSerializer.ReadObject(stream);
+            return (Race[])jsonSerializer.ReadObject(stream);
         }
     }
 }

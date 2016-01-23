@@ -1,6 +1,6 @@
 ﻿using HubApp1.Common;
 using HubApp1.Data;
-
+using HubApp1.Entities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -78,9 +78,11 @@ namespace HubApp1
         /// session.  The state will be null the first time a page is visited.</param>
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            // TODO: Create an appropriate data model for your problem domain to replace the sample data
-            var sampleDataGroups = await SampleDataSource.GetItemsAsync();
-            this.DefaultViewModel["Drivers"] = sampleDataGroups;
+            var drivers = await SampleDataSource.GetItemsAsync();
+            this.DefaultViewModel["Drivers"] = drivers;
+
+            var races = await SampleDataSource.GetRacesAsync();
+            this.DefaultViewModel["Races"] = races;
         }
 
         /// <summary>
@@ -103,11 +105,20 @@ namespace HubApp1
         /// <param name="e">Details about the click event.</param>
         private void GroupSection_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var itemId = ((SampleDataItem)e.ClickedItem).Id;
+            var itemId = ((Driver)e.ClickedItem).Id;
             if (!Frame.Navigate(typeof(ItemPage), itemId))
             {
                 throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
             }
+        }
+
+        private void GroupSection_RaceClick(object sender, ItemClickEventArgs e)
+        {
+            //var itemId = ((Driver)e.ClickedItem).Id;
+            //if (!Frame.Navigate(typeof(ItemPage), itemId))
+            //{
+            //    throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
+            //}
         }
 
         /// <summary>
@@ -156,12 +167,11 @@ namespace HubApp1
             edo.Id = 0;
             edo.pageMode = HelperClass.PageMode.Add;
 
-            if (!Frame.Navigate(typeof(AddDriver),edo))
+            if (!Frame.Navigate(typeof(DriverPage),edo))
             {
                 var resourceLoader = ResourceLoader.GetForCurrentView("Resources");
                 throw new Exception(resourceLoader.GetString("NavigationFailedExceptionMessage"));
             }
         }
-
     }
 }

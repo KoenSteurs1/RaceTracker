@@ -51,9 +51,9 @@
             </Image>
         </Grid>
         <Grid DataContext="{Binding Driver}" Grid.Column="1" x:Name="ContentRoot" Margin="10,129,10,10" Grid.RowSpan="2">
-
             <TextBlock Style="{ThemeResource ListViewItemContentTextBlockStyle}" Text="{Binding FirstName}"></TextBlock>
             <TextBlock Margin="0,20,0,0" Style="{ThemeResource ListViewItemContentTextBlockStyle}" Text="{Binding LastName}"></TextBlock>
+            <TextBlock Margin="0,40,0,0" Style="{ThemeResource ListViewItemContentTextBlockStyle}" Text="{Binding BirthDate}"></TextBlock>
         </Grid>
     </Grid>
 

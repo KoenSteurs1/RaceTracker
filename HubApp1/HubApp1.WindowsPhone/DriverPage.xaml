@@ -1,12 +1,19 @@
 ﻿<Page
-    x:Class="HubApp1.AddDriver"
+    x:Class="HubApp1.DriverPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:HubApp1"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
+    d:DataContext="{Binding Source={d:DesignData Source=../HubApp1.Shared/DataModel/SampleData.json, Type=data:SampleDataSource}}"
+    xmlns:data="using:HubApp1.Data"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <local:DateTimeToDateTimeOffsetConverter x:Key="DateTimeToDateTimeOffsetConverter" />
+    </Page.Resources>
 
     <Grid x:Name="LayoutRoot">
 
@@ -28,11 +35,10 @@
         </StackPanel>
 
         <!--TODO: Content should be placed within the following grid-->
-        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-            <TextBox Name="firstName" Header="First Name"/>
-            <TextBox Name="lastName" Header="Last Name" Margin="0,89,0,0"/>
-            <DatePicker Name="birthdate" Header="Birthdate" Margin="0,178,0,0"  Date="2013-04-03"/>
-            
+        <Grid DataContext="{Binding Driver}" Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
+            <TextBox Text="{Binding FirstName, Mode=TwoWay}" Name="firstName" Header="First Name"/>
+            <TextBox Text="{Binding LastName, Mode=TwoWay}" Name="lastName" Header="Last Name" Margin="0,89,0,0"/>
+            <DatePicker Date="{Binding BirthDate, Converter={StaticResource DateTimeToDateTimeOffsetConverter}, Mode=TwoWay}" Name="birthdate" Header="Birthdate" Margin="0,178,0,0" />
         </Grid>
     </Grid>
 
