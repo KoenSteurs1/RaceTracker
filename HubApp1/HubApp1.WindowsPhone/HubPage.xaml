@@ -14,7 +14,7 @@
         <CommandBar IsSticky="False" x:Name="appBar">
             <CommandBar.PrimaryCommands>
                 <AppBarButton Icon="Add" IsCompact="False" Label="Add Driver" Click="AppBarButton_Click"/>
-                <AppBarButton Icon="Add" IsCompact="False" Label="Add Race" Click="AppBarButton_Click"/>
+                <AppBarButton Icon="Add" IsCompact="False" Label="Add Race" Click="AddRace_Click"/>
             </CommandBar.PrimaryCommands>
         </CommandBar>
     </Page.BottomAppBar>

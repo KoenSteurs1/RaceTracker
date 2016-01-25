@@ -6,19 +6,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Windows.Input;
 using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
-using Windows.UI.Core;
-using Windows.UI.ViewManagement;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Universal Hub Application project template is documented at http://go.microsoft.com/fwlink/?LinkID=391955
@@ -26,22 +25,16 @@ using Windows.UI.Xaml.Navigation;
 namespace HubApp1
 {
     /// <summary>
-    /// A page that displays a grouped collection of items.
+    /// A page that displays details for a single item within a group.
     /// </summary>
-    public sealed partial class HubPage : Page
+    public sealed partial class ViewRacePage : Page
     {
         private readonly NavigationHelper navigationHelper;
         private readonly ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
 
-        public HubPage()
+        public ViewRacePage()
         {
             this.InitializeComponent();
-
-            // Hub is only supported in Portrait orientation
-            DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
-
-            this.NavigationCacheMode = NavigationCacheMode.Required;
 
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
@@ -57,8 +50,7 @@ namespace HubApp1
         }
 
         /// <summary>
-        /// Gets the view model for this <see cref="Page"/>.
-        /// This can be changed to a strongly typed view model.
+        /// Gets the view model for this <see cref="Page"/>. This can be changed to a strongly typed view model.
         /// </summary>
         public ObservableDictionary DefaultViewModel
         {
@@ -78,11 +70,10 @@ namespace HubApp1
         /// session.  The state will be null the first time a page is visited.</param>
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            var drivers = await SampleDataSource.GetItemsAsync();
-            this.DefaultViewModel["Drivers"] = drivers;
-
-            var races = await SampleDataSource.GetRacesAsync();
-            this.DefaultViewModel["Races"] = races;
+            // TODO: Create an appropriate data model for your problem domain to replace the sample data
+            //var item = await SampleDataSource.GetItemAsync((string)e.NavigationParameter);
+            var item = await SampleDataSource.GetRaceAsync(e.NavigationParameter.ToString());
+            this.DefaultViewModel["Race"] = item;
         }
 
         /// <summary>
@@ -97,42 +88,44 @@ namespace HubApp1
         {
             // TODO: Save the unique state of the page here.
         }
-
-        /// <summary>
-        /// Shows the details of a clicked group in the <see cref="SectionPage"/>.
-        /// </summary>
-        /// <param name="sender">The source of the click event.</param>
-        /// <param name="e">Details about the click event.</param>
-        private void GroupSection_ItemClick(object sender, ItemClickEventArgs e)
+        private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
-            var itemId = ((Driver)e.ClickedItem).Id;
-            if (!Frame.Navigate(typeof(ItemPage), itemId))
+
+            if (!Frame.Navigate(typeof(HubPage)))
             {
-                throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
+                var resourceLoader = ResourceLoader.GetForCurrentView("Resources");
+                throw new Exception(resourceLoader.GetString("NavigationFailedExceptionMessage"));
             }
         }
 
-        private void GroupSection_RaceClick(object sender, ItemClickEventArgs e)
+        private void AppBarEditButton_Click(object sender, RoutedEventArgs e)
         {
-            var itemId = ((Race)e.ClickedItem).ID;
-            if (!Frame.Navigate(typeof(ViewRacePage), itemId))
+            EditDriverObject edo = new EditDriverObject();
+            edo.Id = ((Race)this.DefaultViewModel["Race"]).ID;
+            edo.pageMode = HelperClass.PageMode.Edit;
+
+            if (!Frame.Navigate(typeof(RacePage), edo))
             {
-                throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
+                var resourceLoader = ResourceLoader.GetForCurrentView("Resources");
+                throw new Exception(resourceLoader.GetString("NavigationFailedExceptionMessage"));
             }
         }
 
-        /// <summary>
-        /// Shows the details of an item clicked on in the <see cref="ItemPage"/>
-        /// </summary>
-        /// <param name="sender">The source of the click event.</param>
-        /// <param name="e">Defaults about the click event.</param>
-        private void ItemView_ItemClick(object sender, ItemClickEventArgs e)
+        private async void AppBarButton_Delete(object sender, RoutedEventArgs e)
         {
-            //var itemId = ((SampleDataItem)e.ClickedItem).Id;
-            //if (!Frame.Navigate(typeof(ItemPage), itemId))
-            //{
-            //    throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
-            //}
+            int itemId = ((Race)this.DefaultViewModel["Race"]).ID;
+
+            string response = await SampleDataSource.DeleteRace(itemId);
+
+            MessageDialog msgbox = new MessageDialog("Race deleted! Byebye!");
+
+            await msgbox.ShowAsync();
+
+            if (!Frame.Navigate(typeof(HubPage)))
+            {
+                var resourceLoader = ResourceLoader.GetForCurrentView("Resources");
+                throw new Exception(resourceLoader.GetString("NavigationFailedExceptionMessage"));
+            }
         }
 
         #region NavigationHelper registration
@@ -160,31 +153,5 @@ namespace HubApp1
         }
 
         #endregion
-
-        private void AppBarButton_Click(object sender, RoutedEventArgs e)
-        {
-            EditDriverObject edo = new EditDriverObject();
-            edo.Id = 0;
-            edo.pageMode = HelperClass.PageMode.Add;
-
-            if (!Frame.Navigate(typeof(DriverPage),edo))
-            {
-                var resourceLoader = ResourceLoader.GetForCurrentView("Resources");
-                throw new Exception(resourceLoader.GetString("NavigationFailedExceptionMessage"));
-            }
-        }
-
-        private void AddRace_Click(object sender, RoutedEventArgs e)
-        {
-            EditDriverObject edo = new EditDriverObject();
-            edo.Id = 0;
-            edo.pageMode = HelperClass.PageMode.Add;
-
-            if (!Frame.Navigate(typeof(RacePage), edo))
-            {
-                var resourceLoader = ResourceLoader.GetForCurrentView("Resources");
-                throw new Exception(resourceLoader.GetString("NavigationFailedExceptionMessage"));
-            }
-        }
     }
 }

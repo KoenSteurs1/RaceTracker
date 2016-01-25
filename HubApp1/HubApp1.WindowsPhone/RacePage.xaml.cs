@@ -27,13 +27,13 @@ namespace HubApp1
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public partial class DriverPage : Page
+    public partial class RacePage : Page
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private HelperClass.PageMode pageMode;
 
-        public DriverPage()
+        public RacePage()
         {
             this.InitializeComponent();
 
@@ -73,16 +73,16 @@ namespace HubApp1
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             this.pageMode = ((EditDriverObject)(e.NavigationParameter)).pageMode;
-            int driverId = ((EditDriverObject)(e.NavigationParameter)).Id;
-            Driver drv = new Driver();
+            int raceId = ((EditDriverObject)(e.NavigationParameter)).Id;
+            Race race = new Race();
 
             if (pageMode == HelperClass.PageMode.Edit)
-                PageTitle.Text = "Edit Driver";
+                PageTitle.Text = "Edit Race";
 
             if (pageMode == HelperClass.PageMode.Edit)
-                drv = await SampleDataSource.GetItemAsync(driverId.ToString());
-                
-            this.DefaultViewModel["Driver"] = drv;
+                race = await SampleDataSource.GetRaceAsync(raceId.ToString());
+
+            this.DefaultViewModel["Race"] = race;
         }
 
         /// <summary>
@@ -97,25 +97,25 @@ namespace HubApp1
         {
         }
 
-        private async void SaveDriverButton_Click(object sender, RoutedEventArgs e)
+        private async void SaveRaceButton_Click(object sender, RoutedEventArgs e)
         {
-            Driver driver = (Driver)this.DefaultViewModel["Driver"];
-            string driverId = driver.Id.ToString();
+            Race race = (Race)this.DefaultViewModel["Race"];
+            string raceId = race.ID.ToString();
             string response;
 
             if (this.pageMode == HelperClass.PageMode.Add)
             {
-                response = await SampleDataSource.AddDriverItem(driver);
-                driverId = response;
+                response = await SampleDataSource.AddRace(race);
+                raceId = response;
             }
             else
             {
-                response = await SampleDataSource.UpdateDriver(driver);
+                response = await SampleDataSource.UpdateRace(race);
             }
 
-            MessageDialog msgbox = new MessageDialog("Pit stop completed!");
+            MessageDialog msgbox = new MessageDialog("Chequered flag! Race saved!");
             await msgbox.ShowAsync();
-            Frame.Navigate(typeof(ItemPage), driverId);
+            Frame.Navigate(typeof(ItemPage), raceId);
         }
 
         #region NavigationHelper registration
