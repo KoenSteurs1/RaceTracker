@@ -72,8 +72,8 @@ namespace HubApp1
         /// session.  The state will be null the first time a page is visited.</param>
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            this.pageMode = ((EditDriverObject)(e.NavigationParameter)).pageMode;
-            int driverId = ((EditDriverObject)(e.NavigationParameter)).Id;
+            this.pageMode = ((EditObject)(e.NavigationParameter)).pageMode;
+            int driverId = ((EditObject)(e.NavigationParameter)).Id;
             Driver drv = new Driver();
 
             if (pageMode == HelperClass.PageMode.Edit)

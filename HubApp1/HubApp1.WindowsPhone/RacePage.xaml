@@ -5,6 +5,7 @@
     xmlns:local="using:HubApp1"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
     d:DataContext="{Binding Source={d:DesignData Source=../HubApp1.Shared/DataModel/SampleData.json, Type=data:SampleDataSource}}"
     xmlns:data="using:HubApp1.Data"
@@ -35,12 +36,19 @@
         </StackPanel>
 
         <!--TODO: Content should be placed within the following grid-->
-        <Grid DataContext="{Binding Driver}" Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
+        <Grid DataContext="{Binding Race}" Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
             <DatePicker Date="{Binding Date, Converter={StaticResource DateTimeToDateTimeOffsetConverter}, Mode=TwoWay}" Name="date" Header="Date" Margin="0,0,0,0" />
             <TextBox Text="{Binding Sequence, Mode=TwoWay}" Name="sequence" Header="Sequence" Margin="0,89,0,0"/>
             <TextBox Text="{Binding Type, Mode=TwoWay}" Name="type" Header="Type" Margin="0,178,0,0"/>
             <TextBox Text="{Binding Location, Mode=TwoWay}" Name="location" Header="Location" Margin="0,274,0,0"/>
-            <TextBox Text="{Binding Comment, Mode=TwoWay}" Name="comment" Header="Comment" Margin="0,356,0,0"/>
+            <TextBox Text="{Binding Comment, Mode=TwoWay}" Name="comment" Header="Comment" Margin="0,438,0,0"/>
+            <ComboBox Margin="0,356,0,0" Header="Winner" ItemsSource="{Binding Drivers}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding FirstName}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </Grid>
     </Grid>
 

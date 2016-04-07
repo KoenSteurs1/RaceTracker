@@ -72,8 +72,8 @@ namespace HubApp1
         /// session.  The state will be null the first time a page is visited.</param>
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            this.pageMode = ((EditDriverObject)(e.NavigationParameter)).pageMode;
-            int raceId = ((EditDriverObject)(e.NavigationParameter)).Id;
+            this.pageMode = ((EditObject)(e.NavigationParameter)).pageMode;
+            int raceId = ((EditObject)(e.NavigationParameter)).Id;
             Race race = new Race();
 
             if (pageMode == HelperClass.PageMode.Edit)
@@ -82,7 +82,14 @@ namespace HubApp1
             if (pageMode == HelperClass.PageMode.Edit)
                 race = await SampleDataSource.GetRaceAsync(raceId.ToString());
 
+            var drivers = await SampleDataSource.GetItemsAsync();
+            race.Drivers = drivers.ToList();
+
             this.DefaultViewModel["Race"] = race;
+
+            // get drivers to fill combos
+            //var drivers = await SampleDataSource.GetItemsAsync();
+            //this.defaultViewModel["Drivers"] = drivers;
         }
 
         /// <summary>
@@ -100,7 +107,7 @@ namespace HubApp1
         private async void SaveRaceButton_Click(object sender, RoutedEventArgs e)
         {
             Race race = (Race)this.DefaultViewModel["Race"];
-            string raceId = race.ID.ToString();
+            string raceId = race.Id.ToString();
             string response;
 
             if (this.pageMode == HelperClass.PageMode.Add)
@@ -115,7 +122,7 @@ namespace HubApp1
 
             MessageDialog msgbox = new MessageDialog("Chequered flag! Race saved!");
             await msgbox.ShowAsync();
-            Frame.Navigate(typeof(ItemPage), raceId);
+            Frame.Navigate(typeof(ViewRacePage), raceId);
         }
 
         #region NavigationHelper registration

@@ -100,7 +100,7 @@ namespace HubApp1
 
         private void AppBarEditButton_Click(object sender, RoutedEventArgs e)
         {
-            EditDriverObject edo = new EditDriverObject();
+            EditObject edo = new EditObject();
             edo.Id = ((Driver)this.DefaultViewModel["Driver"]).Id;
             edo.pageMode = HelperClass.PageMode.Edit;
 

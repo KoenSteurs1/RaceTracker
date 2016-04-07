@@ -51,7 +51,7 @@
             </Image>
         </Grid>
         <Grid DataContext="{Binding Race}" Grid.Column="1" x:Name="ContentRoot" Margin="10,129,10,10" Grid.RowSpan="2">
-            <TextBlock Style="{ThemeResource ListViewItemContentTextBlockStyle}" Text="{Binding Date}"></TextBlock>
+            <TextBlock Style="{ThemeResource ListViewItemContentTextBlockStyle}" Text="{Binding FormattedDate}"></TextBlock>
             <TextBlock Margin="0,20,0,0" Style="{ThemeResource ListViewItemContentTextBlockStyle}" Text="{Binding Sequence}"></TextBlock>
             <TextBlock Margin="0,40,0,0" Style="{ThemeResource ListViewItemContentTextBlockStyle}" Text="{Binding Type}"></TextBlock>
             <TextBlock Margin="0,60,0,0" Style="{ThemeResource ListViewItemContentTextBlockStyle}" Text="{Binding Location}"></TextBlock>

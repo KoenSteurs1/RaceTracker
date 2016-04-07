@@ -13,7 +13,7 @@ namespace HubApp1.Common
         };
     }
 
-    public class EditDriverObject
+    public class EditObject
     {
         public HelperClass.PageMode pageMode { get; set; }
         public int Id { get; set; }

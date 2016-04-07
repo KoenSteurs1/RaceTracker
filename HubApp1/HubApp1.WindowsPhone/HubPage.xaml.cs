@@ -114,7 +114,7 @@ namespace HubApp1
 
         private void GroupSection_RaceClick(object sender, ItemClickEventArgs e)
         {
-            var itemId = ((Race)e.ClickedItem).ID;
+            var itemId = ((Race)e.ClickedItem).Id;
             if (!Frame.Navigate(typeof(ViewRacePage), itemId))
             {
                 throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
@@ -163,7 +163,7 @@ namespace HubApp1
 
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
-            EditDriverObject edo = new EditDriverObject();
+            EditObject edo = new EditObject();
             edo.Id = 0;
             edo.pageMode = HelperClass.PageMode.Add;
 
@@ -176,7 +176,7 @@ namespace HubApp1
 
         private void AddRace_Click(object sender, RoutedEventArgs e)
         {
-            EditDriverObject edo = new EditDriverObject();
+            EditObject edo = new EditObject();
             edo.Id = 0;
             edo.pageMode = HelperClass.PageMode.Add;
 

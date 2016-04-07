@@ -12,7 +12,7 @@ namespace HubApp1.Entities
 
         public Race(int id, DateTime? date, int? sequence, int type, string location, string comment)
         {
-            this.ID = id;
+            this.Id = id;
             this.Date = date;
             this.Sequence = sequence;
             this.Type = type;
@@ -22,7 +22,7 @@ namespace HubApp1.Entities
             this.FormattedDate = this.FormatDate();
         }
 
-        public int ID { get; set; }
+        public int Id { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
         public Nullable<int> Sequence { get; set; }
         public int Type { get; set; }
@@ -30,6 +30,7 @@ namespace HubApp1.Entities
         public string Comment { get; set; }
         public string Title { get; private set; }
         public string FormattedDate { get; private set; }
+        public List<Driver> Drivers { get; set; }
 
         public override string ToString()
         {
@@ -40,5 +41,6 @@ namespace HubApp1.Entities
         {
             return this.Date.Value.ToString("dd/MM/yyyy");
         }
+
     }
 }

@@ -115,7 +115,7 @@ namespace HubApp1.Data
             foreach (var race in allRaces)
             {
                 var sampleDataItem = new Race(
-                    race.ID,
+                    race.Id,
                     race.Date,
                     race.Sequence,
                     race.Type,
@@ -154,7 +154,7 @@ namespace HubApp1.Data
         {
             await _sampleDataSource.RefreshRaces();
             int iid = Convert.ToInt16(id);
-            var matches = _sampleDataSource.Races.Where(p => p.ID.Equals(iid)).FirstOrDefault();
+            var matches = _sampleDataSource.Races.Where(p => p.Id.Equals(iid)).FirstOrDefault();
             return matches;
         }
     }

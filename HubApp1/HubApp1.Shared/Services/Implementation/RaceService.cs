@@ -54,7 +54,7 @@ namespace HubApp1.Services.Implementation
         public async Task<string> UpdateRace(Race race)
         {
             string data = JsonConvert.SerializeObject(race);
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(RestServiceUrl + "/" + race.ID.ToString());
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(RestServiceUrl + "/" + race.Id.ToString());
             request.ContentType = "application/json";
             request.Method = "PUT";
             var stream = await request.GetRequestStreamAsync();

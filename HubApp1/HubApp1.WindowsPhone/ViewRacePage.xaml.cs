@@ -100,8 +100,8 @@ namespace HubApp1
 
         private void AppBarEditButton_Click(object sender, RoutedEventArgs e)
         {
-            EditDriverObject edo = new EditDriverObject();
-            edo.Id = ((Race)this.DefaultViewModel["Race"]).ID;
+            EditObject edo = new EditObject();
+            edo.Id = ((Race)this.DefaultViewModel["Race"]).Id;
             edo.pageMode = HelperClass.PageMode.Edit;
 
             if (!Frame.Navigate(typeof(RacePage), edo))
@@ -113,7 +113,7 @@ namespace HubApp1
 
         private async void AppBarButton_Delete(object sender, RoutedEventArgs e)
         {
-            int itemId = ((Race)this.DefaultViewModel["Race"]).ID;
+            int itemId = ((Race)this.DefaultViewModel["Race"]).Id;
 
             string response = await SampleDataSource.DeleteRace(itemId);
 
