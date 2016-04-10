@@ -74,6 +74,7 @@ namespace HubApp1
             //var item = await SampleDataSource.GetItemAsync((string)e.NavigationParameter);
             var item = await SampleDataSource.GetRaceAsync(e.NavigationParameter.ToString());
             this.DefaultViewModel["Race"] = item;
+            this.DefaultViewModel["Results"] = item.RaceResultSet;
         }
 
         /// <summary>
@@ -153,5 +154,7 @@ namespace HubApp1
         }
 
         #endregion
+
+
     }
 }

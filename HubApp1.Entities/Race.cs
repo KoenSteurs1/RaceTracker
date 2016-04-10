@@ -10,7 +10,7 @@ namespace HubApp1.Entities
     {
         public Race() { }
 
-        public Race(int id, DateTime? date, int? sequence, int type, string location, string comment)
+        public Race(int id, DateTime? date, int? sequence, int type, string location, string comment, IEnumerable<RaceResultSet> raceResultSet)
         {
             this.Id = id;
             this.Date = date;
@@ -20,6 +20,7 @@ namespace HubApp1.Entities
             this.Comment = comment;
             this.Title = this.ToString();
             this.FormattedDate = this.FormatDate();
+            this.RaceResultSet = raceResultSet.OrderBy(b => b.Position).ToList();
         }
 
         public int Id { get; set; }
@@ -31,7 +32,7 @@ namespace HubApp1.Entities
         public string Title { get; private set; }
         public string FormattedDate { get; private set; }
         public List<Driver> Drivers { get; set; }
-        public virtual ICollection<RaceResultSet> RaceResultSet { get; set; }
+        public IEnumerable<RaceResultSet> RaceResultSet { get; set; }
 
         public override string ToString()
         {

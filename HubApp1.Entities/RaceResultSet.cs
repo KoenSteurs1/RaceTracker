@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HubApp1.Entities
 {
-    class RaceResultSet
+    public class RaceResultSet
     {
         public RaceResultSet() { }
 

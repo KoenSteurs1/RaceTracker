@@ -24,6 +24,7 @@ namespace HubApp1.Entities
         public Nullable<System.DateTime> BirthDate { get; set; }
         public byte[] Picture { get; set; }
         public string Title { get; private set; }
+        public ICollection<RaceResultSet> RaceResultSet { get; set; }
 
         public override string ToString()
         {

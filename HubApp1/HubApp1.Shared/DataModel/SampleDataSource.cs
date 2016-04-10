@@ -120,7 +120,9 @@ namespace HubApp1.Data
                     race.Sequence,
                     race.Type,
                     race.Location,
-                    race.Comment);
+                    race.Comment,
+                    race.RaceResultSet
+                    );
 
                 _sampleDataSource.Races.Add(sampleDataItem);
             }
